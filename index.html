@@ -1,19 +1,6 @@
 <!doctype html>
 <html lang="en">
 <head>
-<!-- Google Analytics: runs only on kamelnabil.com and its subdomains -->
-<script>
-if (/(^|\.)kamelnabil\.com$/.test(location.hostname)) {
-  var ga = document.createElement('script');
-  ga.async = true;
-  ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-SQX5JZP3MM';
-  document.head.appendChild(ga);
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = function () { dataLayer.push(arguments); };
-  gtag('js', new Date());
-  gtag('config', 'G-SQX5JZP3MM');
-}
-</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
@@ -148,7 +135,16 @@ footer .wrap{padding-block:26px 34px;display:flex;flex-wrap:wrap;gap:8px 28px;fo
   .road li{grid-template-columns:44px minmax(0,1fr)}.road .chip{grid-column:2;justify-self:start}.road .no{font-size:28px}
   .phases{grid-template-columns:1fr}
   .palette{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (max-width:640px){.cards{grid-template-columns:1fr 1fr}.wrap{padding-inline:16px}.hero .bar nav{display:none}}
+@media (max-width:640px){.wrap{padding-inline:16px}.hero .bar nav{display:none}
+  .cards{grid-template-columns:minmax(0,1fr);gap:12px}
+  .card{grid-template-columns:118px minmax(0,1fr);grid-template-rows:none;border-top:0;border-left:3px solid var(--gold)}
+  .card:hover{transform:none}
+  .card .thumb{aspect-ratio:auto;min-height:118px;height:100%}
+  .card .body{padding:12px 14px 14px;gap:4px}.card h3{font-size:16px}.card p{font-size:13px;line-height:1.5}
+  .tabs button .tl{display:none}.tabs button .ts{display:inline}
+  .tabsbar .tabs{gap:0;justify-content:space-between;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 18px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 18px),transparent)}
+  .tabsbar .tabs.end{-webkit-mask-image:none;mask-image:none}
+  .tabsbar .tabs button{padding:17px 7px 15px;letter-spacing:.1em;font-size:11px}.tabsbar .tabs button:first-child{padding-left:0}.tabsbar .tabs button:last-child{padding-right:0}}
 @media (prefers-reduced-motion:reduce){.card{transition:none}}
 /* finishing phases timeline */
 .glegend{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:13px;color:var(--ink2)}
@@ -189,6 +185,7 @@ footer .wrap{padding-block:26px 34px;display:flex;flex-wrap:wrap;gap:8px 28px;fo
 .tabs button:hover{color:var(--head)}
 .tabs button[aria-selected="true"]{color:var(--head);border-bottom-color:var(--gold)}
 .tabs button:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+.tabs .ts{display:none}
 main{padding-block:64px 88px!important}
 /* what you love */
 .lvchips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px}
@@ -214,7 +211,7 @@ dialog.lb::backdrop{background:rgba(12,12,12,.95)}
 .lbnav{display:flex;gap:8px;justify-content:center;padding:0 0 16px}
 .lbnav button{appearance:none;border:1px solid #555;background:#1b1b1b;color:#EEE;font:600 14px var(--font);padding:9px 14px;cursor:pointer}
 .lbnav button:focus-visible{outline:2px solid var(--gold)}
-@media (max-width:640px){.love{columns:2 140px;column-gap:10px}.lv{margin-bottom:10px}.tabs{gap:22px}}
+@media (max-width:640px){.love{columns:2 140px;column-gap:10px}.lv{margin-bottom:10px}}
 
 </style>
 
@@ -238,12 +235,13 @@ dialog.lb::backdrop{background:rgba(12,12,12,.95)}
     <div><span>Where we are</span><b>Step 2 of 7: the layout</b><small>Your pick: Andrew's Proposal 1, Rev 3.1 or Rev 4 · updated 14 Oct 2026</small></div>
 </div>
 </div></div>
+<div id="tabstop"></div>
 <nav class="tabsbar" aria-label="Sections"><div class="wrap"><div class="tabs" role="tablist">
-  <button type="button" role="tab" id="tab-project" aria-controls="project" aria-selected="true">The project</button>
-  <button type="button" role="tab" id="tab-spaces" aria-controls="spaces" aria-selected="false" tabindex="-1">The spaces</button>
-  <button type="button" role="tab" id="tab-working" aria-controls="working" aria-selected="false" tabindex="-1">Working together</button>
-  <button type="button" role="tab" id="tab-phases" aria-controls="phases" aria-selected="false" tabindex="-1">Finishing phases</button>
-  <button type="button" role="tab" id="tab-materials" aria-controls="materials" aria-selected="false" tabindex="-1">Materials</button>
+  <button type="button" role="tab" id="tab-project" aria-controls="project" aria-selected="true"><span class="tl">The project</span><span class="ts">Project</span></button>
+  <button type="button" role="tab" id="tab-spaces" aria-controls="spaces" aria-selected="false" tabindex="-1"><span class="tl">The spaces</span><span class="ts">Spaces</span></button>
+  <button type="button" role="tab" id="tab-working" aria-controls="working" aria-selected="false" tabindex="-1"><span class="tl">Working together</span><span class="ts">Together</span></button>
+  <button type="button" role="tab" id="tab-phases" aria-controls="phases" aria-selected="false" tabindex="-1"><span class="tl">Finishing phases</span><span class="ts">Phases</span></button>
+  <button type="button" role="tab" id="tab-materials" aria-controls="materials" aria-selected="false" tabindex="-1"><span class="tl">Materials</span><span class="ts">Materials</span></button>
 </div></div></nav>
 <div class="wrap">
   <main>
@@ -310,21 +308,26 @@ dialog.lb::backdrop{background:rgba(12,12,12,.95)}
 </div>
 <script>
 (function(){
-  var tabs=[].slice.call(document.querySelectorAll('.tabs [role=tab]')), bar=document.querySelector('.tabsbar');
+  var tabs=[].slice.call(document.querySelectorAll('.tabs [role=tab]')), bar=document.querySelector('.tabsbar'), strip=document.querySelector('.tabs'), top0=document.getElementById('tabstop');
+  function edge(){ strip.classList.toggle('end',strip.scrollLeft+strip.clientWidth>=strip.scrollWidth-2); }
+  strip.addEventListener('scroll',edge,{passive:true}); window.addEventListener('resize',edge); edge();
   var ids=tabs.map(function(t){return t.getAttribute('aria-controls')});
-  function show(id,focus,scroll){
+  function show(id,focus,scroll,quiet){
     if(ids.indexOf(id)<0)id='project';
     tabs.forEach(function(t){var on=t.getAttribute('aria-controls')===id;t.setAttribute('aria-selected',on?'true':'false');t.tabIndex=on?0:-1;if(on&&focus)t.focus();});
     ids.forEach(function(p){document.getElementById(p).hidden=(p!==id)});
-    try{history.replaceState(null,'','#'+id)}catch(e){}
-    if(scroll&&window.scrollY>bar.offsetTop)window.scrollTo(0,bar.offsetTop);
+    if(!quiet)try{history.replaceState(null,'','#'+id)}catch(e){}   // not on load: a #project written then makes the browser jump past the hero
+    var on=tabs.filter(function(t){return t.getAttribute('aria-selected')==='true'})[0];
+    if(on&&strip.scrollWidth>strip.clientWidth){ var r=on.getBoundingClientRect(), sr=strip.getBoundingClientRect(); if(r.left<sr.left||r.right>sr.right)strip.scrollLeft+=r.left-sr.left-(sr.width-r.width)/2; }
+    var y0=top0.getBoundingClientRect().top+window.scrollY;
+    if(scroll&&window.scrollY>y0)window.scrollTo(0,y0);
   }
   tabs.forEach(function(t,i){
     t.addEventListener('click',function(){show(t.getAttribute('aria-controls'),false,true)});
     t.addEventListener('keydown',function(e){var d=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;if(!d)return;e.preventDefault();show(ids[(i+d+ids.length)%ids.length],true,false)});
   });
   [].forEach.call(document.querySelectorAll('[data-tab]'),function(a){a.addEventListener('click',function(e){e.preventDefault();show(a.getAttribute('data-tab'),false,true)})});
-  show((location.hash||'').slice(1),false,false);
+  show((location.hash||'').slice(1),false,false,true);
   window.addEventListener('hashchange',function(){show((location.hash||'').slice(1),false,false)});
   // timeline tooltips on hover and keyboard focus
   var gantt=document.querySelector('.gantt'), tip=document.getElementById('gtip');
@@ -357,5 +360,4 @@ dialog.lb::backdrop{background:rgba(12,12,12,.95)}
 </script>
 <footer><div class="wrap"><span>AZAD Apartment · interior architecture</span><span>Drawn from the as-built survey · verify on site</span><span>Not for construction</span></div></footer>
 
-<script src="https://kamelnabil.com/notify.js" defer></script>
 </html>

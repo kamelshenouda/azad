@@ -1,19 +1,6 @@
 <!doctype html>
 <html lang="en">
 <head>
-<!-- Google Analytics: runs only on kamelnabil.com and its subdomains -->
-<script>
-if (/(^|\.)kamelnabil\.com$/.test(location.hostname)) {
-  var ga = document.createElement('script');
-  ga.async = true;
-  ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-SQX5JZP3MM';
-  document.head.appendChild(ga);
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = function () { dataLayer.push(arguments); };
-  gtag('js', new Date());
-  gtag('config', 'G-SQX5JZP3MM');
-}
-</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
@@ -40,15 +27,25 @@ main{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:2px;back
 .tag{position:absolute;left:12px;top:12px;z-index:2;background:var(--sheet);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:5px 10px;font:600 12.5px var(--display);pointer-events:none}
 .side.lead .tag{border-color:var(--accent);color:var(--accent)}
 p.note{margin:0;color:var(--muted);font-size:12.5px;max-width:62ch}
-@media (max-width:760px){ main{grid-template-columns:1fr;grid-template-rows:1fr 1fr} header{padding:10px 16px} }
+label .tb{display:none}
+/* phones: the two views stack, so the pickers say top and bottom; the header keeps to two rows */
+@media (max-width:760px){ main{grid-template-columns:1fr;grid-template-rows:1fr 1fr}
+  header{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px 10px;padding:4px 16px 8px}
+  header a.back{display:inline-flex;align-items:center;min-height:44px;font-size:13px}
+  header h1{font-size:16px;align-self:center;justify-self:end}
+  header .sp,p.note{display:none}
+  label .lr{display:none} label .tb{display:inline}
+  label{min-width:0} label select{flex:1;min-width:0;min-height:40px;font-size:14px}
+  label.lk{grid-column:1/-1;min-height:36px;font-size:13px} label.lk input{width:20px;height:20px}
+  .tag{top:auto;bottom:10px} }
 </style>
 <header>
   <a class="back" href="3d.html">← 3D</a>
   <h1>Two plans, side by side</h1>
   <span class="sp"></span>
-  <label>Left <select id="pa"></select></label>
-  <label>Right <select id="pb"></select></label>
-  <label><input type="checkbox" id="link" checked> Move together</label>
+  <label><span class="lr">Left</span><span class="tb">Top</span> <select id="pa"></select></label>
+  <label><span class="lr">Right</span><span class="tb">Bottom</span> <select id="pb"></select></label>
+  <label class="lk"><input type="checkbox" id="link" checked> Move together</label>
   <p class="note">Walk or orbit in either view and the other follows, same spot and same time of day, so you can see what each plan does to the room.</p>
 </header>
 <main>
@@ -83,5 +80,4 @@ p.note{margin:0;color:var(--muted);font-size:12.5px;max-width:62ch}
 })();
 </script>
 
-<script src="https://kamelnabil.com/notify.js" defer></script>
 </html>
