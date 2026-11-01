@@ -229,6 +229,20 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 /* what changes: as built to Proposal 1 */
 .bakey{display:flex;flex-wrap:wrap;gap:4px 12px;font:500 12px var(--mono);color:var(--ink2);margin-top:6px}
 .bakey i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+/* the walkthrough: a caption card with its chapters */
+.story{position:absolute;z-index:5;left:50%;bottom:18px;transform:translateX(-50%);width:min(560px,calc(100% - 24px));background:rgba(251,250,247,.95);color:#1D2125;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.2);padding:14px 16px 12px;display:grid;gap:8px}
+.story .sk2{font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#7A5A2E}
+.story h2{margin:0;font:600 20px/1.2 var(--display);letter-spacing:-.01em}
+.story p{margin:0;font:14px/1.5 var(--display);color:#3a3f44}
+.story .sdots{display:flex;gap:6px}.story .sdots i{width:22px;height:4px;border-radius:2px;background:#d6d1c8}.story .sdots i.on{background:#2E5A74}
+.story .sbtns{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+.story button{appearance:none;border:1px solid #c9c3b8;background:#fff;color:#1D2125;font:600 13px var(--display);padding:9px 12px;border-radius:8px;cursor:pointer;min-height:40px}
+.story button.pri{background:#2E5A74;border-color:#2E5A74;color:#fff}
+.story button:focus-visible{outline:2px solid #2E5A74;outline-offset:2px}
+.walkgo{width:100%;margin-bottom:8px}
+/* the layered view: a name and a fact beside each layer */
+.lyr{position:absolute;z-index:3;transform:translate(-100%,-50%);font:600 12px var(--mono);color:#1D2125;background:rgba(251,250,247,.94);padding:4px 9px;border-radius:5px;box-shadow:0 1px 6px rgba(0,0,0,.18);pointer-events:none;white-space:nowrap}
+.lyr small{display:block;font-weight:500;color:#555}
 /* day, golden hour, night */
 .todp{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:10px}
 /* loading: the plan's walls drawn as blueprint lines, then the model */
@@ -376,6 +390,7 @@ h3{font-weight:600}
     <nav class="tabs" role="tablist" aria-label="Controls"><button type="button" role="tab" data-tab="go" aria-selected="false" aria-controls="tab-go" id="tb-go"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5c-3 0-5.2 2.3-5.2 5.1 0 3.8 5.2 9.9 5.2 9.9s5.2-6.1 5.2-9.9c0-2.8-2.2-5.1-5.2-5.1z" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="10" cy="7.7" r="1.9" fill="currentColor"/></svg><span>Go</span></button><button type="button" role="tab" data-tab="view" aria-selected="false" aria-controls="tab-view" id="tb-view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.8 17 6.6 10 10.4 3 6.6z M3 10.2l7 3.8 7-3.8 M3 13.6l7 3.8 7-3.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><span>View</span></button><button type="button" role="tab" data-tab="fin" aria-selected="false" aria-controls="tab-fin" id="tb-fin" hidden><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="2.5" width="6.5" height="6.5" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="2.5" width="6.5" height="6.5" rx="1.6" fill="currentColor" opacity=".35" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="11" width="6.5" height="6.5" rx="1.6" fill="currentColor" opacity=".7" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6.5" height="6.5" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span>Finishes</span></button><button type="button" role="tab" data-tab="light" aria-selected="false" aria-controls="tab-light" id="tb-light"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="3.6" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 1.8v2.4M10 15.8v2.4M1.8 10h2.4M15.8 10h2.4M4.2 4.2l1.7 1.7M14.1 14.1l1.7 1.7M4.2 15.8l1.7-1.7M14.1 5.9l1.7-1.7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span>Light</span></button><button type="button" role="tab" data-tab="furnish" aria-selected="false" aria-controls="tab-furnish" id="tb-furnish"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3.5 9.5V7.2c0-1.3 1-2.2 2.2-2.2h8.6c1.2 0 2.2.9 2.2 2.2v2.3M2.5 9.5h15v4.3h-15zM4.2 13.8v2.2M15.8 13.8v2.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><span>Furnish</span></button><button type="button" role="tab" data-tab="more" aria-selected="false" aria-controls="tab-more" id="tb-more"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="4.5" cy="10" r="1.6" fill="currentColor"/><circle cx="10" cy="10" r="1.6" fill="currentColor"/><circle cx="15.5" cy="10" r="1.6" fill="currentColor"/></svg><span>More</span></button></nav>
 
     <section class="tabp" id="tab-go" role="tabpanel" aria-labelledby="tb-go">
+      <div class="ftools" data-only="p1"><button type="button" class="walkgo" id="walkgo" title="A guided walk through Proposal 1: the door, the foyer, the kitchen, dining, the garden, and into the evening">▶ Walkthrough of Proposal 1</button></div>
       <div class="rooms" id="views">
         <button type="button" class="wide" data-view="overview" aria-pressed="true"><span>Overview</span><kbd class="sk" data-k="0"></kbd></button>
         <button type="button" data-view="entrance">Main door</button>
@@ -411,6 +426,8 @@ h3{font-weight:600}
       <div class="ctl"><div class="cl"><span>Dimensions</span><kbd class="sk" data-k="8"></kbd></div><div class="bt" data-state="dim"><button type="button" data-v="off" aria-pressed="true">Off</button><button type="button" data-v="on" aria-pressed="false" title="Room widths and lengths in metres, from the survey">On</button></div></div>
       <div class="ctl" id="wallrow"><div class="cl"><span>Height from above</span><kbd class="sk" data-k="9"></kbd></div><div class="bt" data-state="cut"><button type="button" data-v="full" aria-pressed="true" title="Real height: 2.80 m to the slab">2.80 m</button><button type="button" data-v="cut" aria-pressed="false" title="Cut at 1.25 m to see into the rooms">Cut at 1.25 m</button></div></div>
       <h3 data-only="p1">Proposal 1 trials</h3>
+      <div class="ctl"><div class="cl"><span>Layers</span></div>
+        <div class="ftools"><button type="button" id="lyopen" title="From above: the floor stays, the furniture and joinery, the walls and the lighting lift apart">Separate the layers</button><button type="button" id="lyclose" disabled>Put back</button></div></div>
       <div class="ctl" data-only="p1"><div class="cl"><span>What changes</span></div>
         <div class="ftools"><button type="button" id="baplay" title="From above: the as-built walls Andrew removes lift away, then the new ones rise">▶ As built → Proposal 1</button><button type="button" id="barev" title="The same, played backwards">◀ Back to as built</button><button type="button" id="baclose" hidden>Done</button></div>
         <div class="bakey" id="bakey" hidden><span><i style="background:#EDE8DF;border:1px solid #bbb"></i>Stays</span><span><i style="background:#C2492F"></i>Removed</span><span><i style="background:#4F8A4A"></i>New</span></div></div>
@@ -489,6 +506,8 @@ h3{font-weight:600}
     <div class="aim" id="aim" hidden aria-hidden="true"></div>
     <canvas class="minimap" id="minimap" hidden tabindex="0" aria-label="Plan of the apartment showing where you stand and which way you face. Click a spot to walk there."></canvas>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="story" id="story" hidden role="region" aria-label="Walkthrough"><div class="sk2" id="stk"></div><h2 id="sth"></h2><p id="stp"></p><div class="sdots" id="stdots" aria-hidden="true"></div>
+      <div class="sbtns"><button type="button" id="stexit">Explore freely</button><button type="button" id="stprev">‹ Back</button><button type="button" id="stauto" aria-pressed="false">▶ Play</button><button type="button" class="pri" id="stnext">Next ›</button></div></div>
     <div class="sunh" id="sunh" hidden role="slider" tabindex="0" aria-label="The sun: drag it along its path to change the time of day" aria-valuemin="5" aria-valuemax="22.5" aria-valuenow="12"></div>
     <div class="sunlbl" id="sunlbl" hidden aria-hidden="true"></div>
     <div class="joy" id="joy" hidden role="application" aria-label="Thumb pad: push up to walk forward, down to step back, left or right to turn"><svg viewBox="0 0 104 104" aria-hidden="true"><path d="M52 9l-6 7h12zM52 95l-6-7h12zM9 52l7-6v12zM95 52l-7-6v12z" fill="currentColor"/></svg><b></b></div>
@@ -1064,7 +1083,7 @@ function setLights(){
   var eye=typeof mode!=='undefined'&&mode==='eye', pergola=state.gs==='pergola';
   lxObjs.forEach(function(m){ var u=m.userData, lv=lxLevel(u.k,u.g==='outp'?'out':u.g)*(u.g==='outp'&&!pergola?0:1)*lxRamp(u.g);
     if(u.kind==='body'){ m.visible=state.fu==='all'; return; }
-    if(u.kind==='fit'){ m.material.emissiveIntensity=lv*(u.k==='lamp'?.25+.35*NIGHT:1+(u.k==='ceil'?1.2:4)*NIGHT); m.visible=(eye||u.k==='ext'||u.k==='lamp')&&(u.k!=='lamp'||state.fu==='all'); return; }
+    if(u.kind==='fit'){ m.material.emissiveIntensity=lv*(u.k==='lamp'?.25+.35*NIGHT:1+(u.k==='ceil'?1.2:4)*NIGHT); m.visible=(eye||u.k==='ext'||u.k==='lamp'||(typeof LY!=='undefined'&&LY&&LY.on))&&(u.k!=='lamp'||state.fu==='all'); return; }
     var op=lv*NIGHT*(u.kind==='pool'?.3:u.kind==='band'?.32:.38); m.material.opacity=op; m.visible=op>.004&&(u.k!=='lamp'||state.fu==='all'); });
   lamps.forEach(function(l){ var p=l.parent.position, g=lxGroup(p.x/S,p.z/S); l.intensity=12*NIGHT*lxLevel('pend',g)*(l.userData.k||1)*lxRamp(g); });
   var lit=lamps.some(function(l){return l.intensity>0;}); M.lamp.emissiveIntensity=lit?2.2:LXSCENE==='off'?0:.2; M.rattan.emissiveIntensity=lit?.65:0;
@@ -1134,7 +1153,7 @@ function placeSun(){                      // after dark the sun waits at the end
   sunH.setAttribute('aria-valuenow',state.hour); sunH.setAttribute('aria-valuetext',hhmm(state.hour));
 }
 var sunH=document.getElementById('sunh'), sunL=document.getElementById('sunlbl');
-function arcOn(){ return mode==='overview'&&state.sp!=='off'&&!flying&&!renderer.xr.isPresenting; }
+function arcOn(){ return mode==='overview'&&state.sp!=='off'&&!(typeof LY!=='undefined'&&LY&&LY.on)&&!flying&&!renderer.xr.isPresenting; }
 function drawSunArc(){
   var on=arcOn(); sunArc.visible=on;
   if(!on){ sunH.hidden=true; sunL.hidden=true; arcHrEls.forEach(function(e){ e.el.hidden=true; }); return; }
@@ -1223,7 +1242,7 @@ var chgEls=(ALL.changes||[]).map(function(c){ var b=document.createElement('butt
   b.addEventListener('click',function(e){ e.stopPropagation(); showCard(c.n+'. '+c.h,[c.d],null,P(c.x,c.y,150)); });
   stage.appendChild(b); return {el:b,p:P(c.x,c.y,150)}; });
 function drawChanges(){
-  var on=LAYOUT==='p1'&&state.chg!=='off'&&!flying&&!renderer.xr.isPresenting, w=renderer.domElement.clientWidth, h=renderer.domElement.clientHeight, v=new T.Vector3();
+  var on=LAYOUT==='p1'&&state.chg!=='off'&&!flying&&!(LY&&LY.on)&&!renderer.xr.isPresenting, w=renderer.domElement.clientWidth, h=renderer.domElement.clientHeight, v=new T.Vector3();
   chgEls.forEach(function(c){ if(!on){ c.el.hidden=true; return; }
     if(mode==='eye'&&camera.position.distanceTo(c.p)>9){ c.el.hidden=true; return; }      // standing: only the changes near you
     v.copy(c.p).project(camera); var vis=v.z<1&&Math.abs(v.x)<1&&Math.abs(v.y)<1; c.el.hidden=!vis;
@@ -1253,7 +1272,7 @@ function baPose(t){                            // t: 0 as built … 1 Proposal 1
   dirty=true;
 }
 function baStart(dir){
-  if(LAYOUT!=='p1')return; stopPlay(); TOD=null; clearCard();
+  if(LAYOUT!=='p1')return; stopPlay(); TOD=null; clearCard(); if(LY&&LY.on)lyEnd(true);
   if(!BA.on){ BA.on=true; if(!BA.grp)baBuild(); BA.grp.visible=true;
     BA.vis=new Map(); built.forEach(function(o){ if(floors.indexOf(o)<0){ BA.vis.set(o,o.visible); o.visible=false; } });
     if(typeof fObjs!=='undefined')Object.keys(fObjs).forEach(function(id){ BA.vis.set(fObjs[id],fObjs[id].visible); fObjs[id].visible=false; });
@@ -1275,6 +1294,113 @@ function baEnd(){
 document.getElementById('baplay').addEventListener('click',function(){ baStart(1); });
 document.getElementById('barev').addEventListener('click',function(){ baStart(-1); });
 document.getElementById('baclose').addEventListener('click',baEnd);
+
+// ---------- the layered view: from above, the floor stays, the furniture and joinery lift 1 m, the walls, doors and
+// windows 3.4 m, the lighting plan 7 m. Only the pieces' positions in the view move; each is put back exactly where
+// it was (AZAD3D.layers.check() reports the largest difference, which should be 0).
+var LY={on:false,own:false,t0:0,dir:1,run:false,parts:null,els:[]}, LY_UP={furn:1.0,walls:3.4,lights:7.0};
+function lyParts(){
+  var seen=new Set(), out={floor:[],furn:[],walls:[],lights:[]}, lampParents=lamps.map(function(l){ return l.parent; });
+  function add(o,k){ if(!o||seen.has(o))return; seen.add(o); out[k].push({o:o,y:o.position.y}); }
+  built.forEach(function(o){
+    if(floors.indexOf(o)>=0)add(o,'floor'); else if(ceilings.indexOf(o)>=0)return;
+    else if(lampParents.indexOf(o)>=0)add(o,'lights'); else if(furnMeshes.indexOf(o)>=0||(o.userData&&o.userData.f))add(o,'furn'); else add(o,'walls'); });
+  lxObjs.forEach(function(o){ add(o,'lights'); });
+  if(typeof fObjs!=='undefined')Object.keys(fObjs).forEach(function(id){ add(fObjs[id],'furn'); });
+  return out;
+}
+function lyArea(){ var a=0; (SCENE.rooms||[]).forEach(function(r){ if(r.r)a+=(r.r[2]-r.r[0])*(r.r[3]-r.r[1])/1e4; }); return a; }
+function lyLabels(){
+  LY.els.forEach(function(e){ e.el.remove(); }); LY.els=[];
+  var nf=new Set(); (SCENE.pieces||[]).forEach(function(p){ if(p.f)nf.add(p.n); });
+  var fit=lxObjs.filter(function(m){ return m.userData.kind==='fit'; }).length;
+  [['floor',0,'Floor',(state.fl==='wood'?'Oak':'Porcelain 120 × 60')+' · rooms about '+Math.round(lyArea())+' m²'],
+   ['furn',LY_UP.furn+.9,'Joinery and furniture',state.fu==='none'?'none shown':state.fu==='built'?'built-in only':'built-in and loose'],
+   ['walls',LY_UP.walls+1.4,'Walls, doors and windows','as drawn on the plan'],
+   ['lights',LY_UP.lights+2.7,'Lighting plan',fit+' fittings']].forEach(function(L){
+    var d=document.createElement('div'); d.className='lyr'; d.hidden=true; d.textContent=L[2]; var sm=document.createElement('small'); sm.textContent=L[3]; d.appendChild(sm);
+    stage.appendChild(d); LY.els.push({el:d,k:L[0],h:L[1]}); });
+}
+function lyPose(t){
+  var e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2; if(RM)e=t>=.5?1:0;
+  ['furn','walls','lights'].forEach(function(k){ LY.parts[k].forEach(function(q){ q.o.position.y=q.y+LY_UP[k]*e; }); });
+  LY.e=e; renderer.shadowMap.needsUpdate=true; dirty=true;
+}
+function lyStart(){
+  stopPlay(); TOD=null; clearCard(); if(BA&&BA.on)baEnd(); if(ST&&ST.on)stEnd();
+  if(!LY.on){ LY.on=true; LY.parts=lyParts(); lyLabels(); setLights();
+    LY.own=true; goto('overview',RM?1:1400); LY.own=false;
+    if(anim){ anim.toP=P(1050,3150,1050); anim.toT=P(895,850,330); } }
+  LY.dir=1; LY.t0=performance.now(); LY.run=true;
+  document.getElementById('lyopen').disabled=true; document.getElementById('lyclose').disabled=false;
+  statusEl.hidden=false; statusEl.textContent='The layers lift apart: floor, joinery and furniture, walls, and the lighting plan on top. Put back joins them again.';
+}
+function lyEnd(now){                           // now: put everything back at once (a view change or another mode)
+  if(!LY.on)return;
+  if(now){ LY.parts&&['furn','walls','lights'].forEach(function(k){ LY.parts[k].forEach(function(q){ q.o.position.y=q.y; }); }); lyDone(); return; }
+  LY.dir=-1; LY.t0=performance.now(); LY.run=true;
+}
+function lyDone(){ LY.on=false; LY.run=false; LY.els.forEach(function(e){ e.el.remove(); }); LY.els=[]; setLights(); renderer.shadowMap.needsUpdate=true; dirty=true;
+  document.getElementById('lyopen').disabled=false; document.getElementById('lyclose').disabled=true; statusEl.hidden=true; }
+function tickLy(now){
+  if(!LY.on||!LY.run)return; var t=Math.min(1,(now-LY.t0)/(RM?600:2600)); lyPose(LY.dir>0?t:1-t);
+  if(t>=1){ LY.run=false; if(LY.dir<0){ LY.parts&&['furn','walls','lights'].forEach(function(k){ LY.parts[k].forEach(function(q){ q.o.position.y=q.y; }); }); lyDone(); } }
+}
+function drawLy(){
+  if(!LY.on){ return; }
+  var w=renderer.domElement.clientWidth, h=renderer.domElement.clientHeight, v=new T.Vector3(), b=SCENE.bounds||[0,0,1790,1633];
+  LY.els.forEach(function(e){ var lift=e.k==='floor'?0:LY_UP[e.k]*(LY.e||0);
+    v.set(-0.4,(e.k==='floor'?.05:e.h-LY_UP[e.k]+lift),9.0).project(camera);
+    var vis=mode==='overview'&&v.z<1&&Math.abs(v.x)<1.05&&Math.abs(v.y)<1.05; e.el.hidden=!vis;
+    if(vis){ e.el.style.left=Math.max(140,(v.x+1)/2*w)+'px'; e.el.style.top=((1-v.y)/2*h)+'px'; } });
+}
+document.getElementById('lyopen').addEventListener('click',lyStart);
+document.getElementById('lyclose').addEventListener('click',function(){ lyEnd(false); });
+
+// ---------- the walkthrough of Proposal 1: the real views, with their own captions, at the time of day each suits.
+// Camera moves are slow and lift over the walls between rooms; Next or Play moves on; Explore freely leaves you there.
+var ST={on:false,own:false,i:0,auto:false,next:0,keep:null}, STEPS=[
+  {v:'entrance',k:'Arrive',t:'At the front door',h:9},
+  {v:'foyer',k:'Arrive',t:'The foyer',h:9},
+  {v:'kitchen',k:'Cook',t:'The kitchen',p:'midday',dims:1},
+  {v:'aisle',k:'Cook',t:'Along the island',p:'midday'},
+  {v:'dinep1',k:'Gather',t:'Dining for eight',p:'evening'},
+  {v:'wgarden',k:'Garden',t:'Golden hour in the garden',p:'evening'},
+  {v:'wgarden',k:'Evening',t:'Night falls',p:'night',x:'The rooms light up one after another, from the front door to the garden.'}];
+var stEl=document.getElementById('story');
+STEPS.forEach(function(){ document.getElementById('stdots').appendChild(document.createElement('i')); });
+function stShow(i){
+  ST.i=Math.max(0,Math.min(STEPS.length-1,i)); var s=STEPS[ST.i];
+  ST.own=true; goto(s.v,RM?1:2600); ST.own=false;
+  if(s.dims&&state.dim!=='on'){ setKey('dim','on',false); makeLabels(); applyState(); } else if(!s.dims&&state.dim==='on'&&ST.keep.dim!=='on'){ setKey('dim','off',false); makeLabels(); applyState(); }
+  if(s.p)todTo(s.p); else if(Math.abs(state.hour-s.h)>.05){ TOD=null; if(RM)setHour(s.h); else TOD={from:state.hour,to:s.h,t0:performance.now(),dur:1500}; }
+  statusEl.hidden=true;
+  var v=resolveView(s.v); document.getElementById('stk').textContent=(ST.i+1)+' / '+STEPS.length+' · '+s.k;
+  document.getElementById('sth').textContent=s.t;
+  document.getElementById('stp').textContent=s.x||((LAYOUT==='p1'&&state.isl==='trial'&&VIEWS[s.v]&&VIEWS[s.v].msgT)||v.msg||'').replace(/ Press 1:1 for true size\.?/,'');
+  [].forEach.call(document.querySelectorAll('#stdots i'),function(d,j){ d.className=j<=ST.i?'on':''; });
+  document.getElementById('stprev').disabled=ST.i===0;
+  document.getElementById('stnext').textContent=ST.i===STEPS.length-1?'Start again':'Next ›';
+  ST.next=performance.now()+(RM?6000:8500);
+}
+function stStart(){
+  if(LAYOUT!=='p1')return; if(BA&&BA.on)baEnd(); if(LY&&LY.on)lyEnd(true); stopPlay(); clearCard();
+  ST.on=true; ST.keep={hour:state.hour,dim:state.dim}; stEl.hidden=false; stShow(0);
+}
+function stEnd(){
+  if(!ST.on)return; ST.on=false; ST.auto=false; stEl.hidden=true; TOD=null;
+  var b=document.getElementById('stauto'); b.setAttribute('aria-pressed','false'); b.textContent='▶ Play';
+  if(state.dim!==ST.keep.dim){ setKey('dim',ST.keep.dim,false); makeLabels(); applyState(); }
+  statusEl.hidden=false; statusEl.textContent='Explore freely from here: drag to look around, double-click the floor to walk.';
+}
+function tickSt(now){ if(ST.on&&ST.auto&&!anim&&now>ST.next){ if(ST.i<STEPS.length-1)stShow(ST.i+1); else { ST.auto=false; var b=document.getElementById('stauto'); b.setAttribute('aria-pressed','false'); b.textContent='▶ Play'; } } }
+document.getElementById('walkgo').addEventListener('click',function(){ stStart(); if(window.matchMedia&&matchMedia('(max-width:760px)').matches&&window.sheetPeek)window.sheetPeek(); });
+document.getElementById('stnext').addEventListener('click',function(){ stShow(ST.i===STEPS.length-1?0:ST.i+1); });
+document.getElementById('stprev').addEventListener('click',function(){ stShow(ST.i-1); });
+document.getElementById('stexit').addEventListener('click',stEnd);
+document.getElementById('stauto').addEventListener('click',function(){ ST.auto=!ST.auto; this.setAttribute('aria-pressed',ST.auto?'true':'false'); this.textContent=ST.auto?'❚❚ Pause':'▶ Play'; ST.next=performance.now()+(ST.auto?2500:0); });
+window.addEventListener('keydown',function(e){ if(!ST.on||/input|textarea|select/i.test(e.target.tagName))return;
+  if(e.key==='Escape'){ stEnd(); e.stopImmediatePropagation(); } else if(e.key==='PageDown'||e.key===' '&&e.target===document.body){ stShow(ST.i+1); e.preventDefault(); } else if(e.key==='PageUp'){ stShow(ST.i-1); e.preventDefault(); } },true);
 // true north on the ground beside the site
 (function(){var sh=new T.Shape(); sh.moveTo(0,1.1); sh.lineTo(-0.45,-0.6); sh.lineTo(0,-0.25); sh.lineTo(0.45,-0.6); sh.closePath();
   var m=new T.Mesh(new T.ShapeGeometry(sh),new T.MeshBasicMaterial({color:0x1D2125,side:T.DoubleSide}));
@@ -1395,6 +1521,7 @@ var VIEWS={
   utility:{pos:[813,1100,EYE],look:[813,1299,95],z:0.5,msg:'The utility, facing the window, wider than life to take in the small room: the sink under the window, the broom cupboard on your right, the ironing cabinet on your left. Turn round for the washer. Press 1:1 for true size.'},
   foyer:{pos:[1470,1440,EYE],look:[1430,1299,115],z:0.55,msg:'Just inside the front door, wider than life: the etched-glass sliding door ahead (the Doors switch opens it into the oak wall), the coat wall on the left, the reception on the right. Press 1:1 for true size.'},
   trialp1:{pos:[1320,515,EYE],look:[1255,1080,80],z:0.55,isl:'trial',msg:'The island trial, from your photo of 13 Oct, wider than life: a square cream-stone island on a fluted oak base lit from under the slab, and a 2.40 m stone table for 8, four a side, carrying on from its stone end. The Kitchen island switch (View) brings back your design. Press 1:1 for true size.'},
+  wgarden:{pos:[1330,40,EYE],look:[1420,800,115],z:0.6,msg:'On the lawn, looking back at the reception and the living room through the garden doors.'},   // the walkthrough's garden spot
   terrace:{pos:[1560,240,EYE],look:[1100,520,100],msg:'At the outdoor dining table on the terrace.'}
 };
 var mode='overview', anim=null;
@@ -1501,6 +1628,8 @@ function viewLabels(){   // view buttons named after this layout's rooms (Bedroo
 }
 function goto(name,dur){
   if(BA&&BA.on&&!BA.own)baEnd();
+  if(LY&&LY.on&&!LY.own)lyEnd(true);
+  if(ST&&ST.on&&!ST.own)stEnd();
   if(VIEWS[name]&&VIEWS[name].isl&&state.isl!==VIEWS[name].isl){ setKey('isl',VIEWS[name].isl,true); applyState(); }   // a trial's view shows the trial
   var v=resolveView(name); var eye=v.mode!=='overview', wasEye=mode==='eye';
   mode=eye?'eye':'overview'; if(typeof clearCard==='function')clearCard();
@@ -1540,7 +1669,7 @@ renderer.domElement.addEventListener('dblclick',function(e){
 // touch screens, standing: a thumb pad at the bottom left walks (up and down) and turns (left and right)
 var COARSE=(window.matchMedia&&matchMedia('(pointer:coarse)').matches)||Q.get('joy')==='1', joyEl=document.getElementById('joy'), joyKnob=joyEl.querySelector('b'), JOY={on:false,f:0,t:0,id:null}, joyVis=null;
 function joyEnd(){ JOY.on=false; JOY.f=0; JOY.t=0; JOY.id=null; joyEl.classList.remove('on'); joyKnob.style.transform=''; }
-function joyShow(){ var v=COARSE&&mode==='eye'&&!(typeof fOn!=='undefined'&&fOn)&&!renderer.xr.isPresenting;
+function joyShow(){ var v=COARSE&&mode==='eye'&&!(typeof ST!=='undefined'&&ST&&ST.on)&&!(typeof fOn!=='undefined'&&fOn)&&!renderer.xr.isPresenting;
   if(v!==joyVis){ joyVis=v; joyEl.hidden=!v; stage.classList.toggle('joyon',v); if(!v)joyEnd(); } }
 function joySet(e){ var r=joyEl.getBoundingClientRect(), R=r.width/2-22, dx=e.clientX-(r.left+r.width/2), dy=e.clientY-(r.top+r.height/2), L=Math.hypot(dx,dy);
   if(L>R){ dx*=R/L; dy*=R/L; } joyKnob.style.transform='translate('+dx+'px,'+dy+'px)';
@@ -1697,6 +1826,8 @@ makeLabels();
 function setLayout(k){
   if(!ALL.layouts[k])return;
   if(BA&&BA.on)baEnd();
+  if(LY&&LY.on)lyEnd(true);
+  if(ST&&ST.on)stEnd();
   LAYOUT=k; SCENE=ALL.layouts[k]; try{ if(!document.documentElement.classList.contains('embed'))localStorage.setItem('azad-3d-plan',k); }catch(e){}
   if(!userSet.fu)setKey('fu',k==='existing'?'none':'all',false);
   clearCard(); fSel=null; clearModel(); buildModel(); makeWindowLights(); makeLighting(); makeLabels(); syncLayoutUI(); applyState(); if(FIN_ON)finUI(); dirty=true;
@@ -1756,6 +1887,7 @@ window.addEventListener('resize',function(){resize();dirty=true;});
   function setH(px){ appEl.style.setProperty('--sh',Math.round(Math.max(peekH(),Math.min(appEl.clientHeight*.9,px)))+'px'); resize(); dirty=true; }
   function snap(k){ cur=k; setH(hOf(k)); g.setAttribute('aria-label',k==='full'?'Pull down for a bigger view':'Pull up for more controls'); try{localStorage.setItem('azad-3d-sheet',k);}catch(e){} }
   window.sheetOpen=function(){ if(mq.matches&&cur==='peek')snap('half'); };
+  window.sheetPeek=function(){ if(mq.matches)snap('peek'); };   // the walkthrough wants the model, not the controls
   g.addEventListener('pointerdown',function(e){ drag={y:e.clientY,h:panelEl.offsetHeight,moved:false}; g.setPointerCapture(e.pointerId); e.preventDefault(); });
   g.addEventListener('pointermove',function(e){ if(!drag)return; var dy=drag.y-e.clientY; if(Math.abs(dy)>4)drag.moved=true; if(drag.moved)setH(drag.h+dy); });
   g.addEventListener('pointerup',function(){ if(!drag)return; var d=drag; drag=null;
@@ -2472,7 +2604,7 @@ try{ matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',fu
 function loop(now){
   var raw=now-last, dt=Math.min(.05,raw/1000); last=now;
   if(anim&&RM)anim.t0=-1e9;
-  tickTod(now); tickBa(now); if(LXRAMP){ setLights(); if(now>LXRAMP.end)LXRAMP=null; }
+  tickTod(now); tickBa(now); tickLy(now); tickSt(now); if(LXRAMP){ setLights(); if(now>LXRAMP.end)LXRAMP=null; }
   if(renderer.xr.isPresenting){ vrTick(dt); tickSun(dt); renderer.render(scene,camera); return; }
   if(anim){var t=Math.min(1,(now-anim.t0)/anim.dur),e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
     camera.position.lerpVectors(anim.from.p,anim.toP,e); controls.target.lerpVectors(anim.from.t,anim.toT,e);
@@ -2485,7 +2617,7 @@ function loop(now){
   var moving=!!anim||!!(JOY.f||JOY.t)||KEYS.some(function(k){return keys[k];});
   walk(dt); tickSun(dt); controls.update();
   if(moving)adaptQuality(raw,now);
-  if(moving||dirty){ draw(false); drawLabels(); drawSunArc(); drawChanges(); drawDims(); hud(); drawMinimap(); placeCard(); drawMeasures(); drawFDims(); drawFinCards(); dirty=false; needFull=true; idleT=now; dvWant=true; }
+  if(moving||dirty){ draw(false); drawLabels(); drawSunArc(); drawChanges(); drawLy(); drawDims(); hud(); drawMinimap(); placeCard(); drawMeasures(); drawFDims(); drawFinCards(); dirty=false; needFull=true; idleT=now; dvWant=true; }
   else if(needFull&&now-idleT>140){ draw(true); needFull=false; }        // idle frames skip rendering entirely
   else if(dvWant&&now-idleT>450&&dvVisible())renderDayViews();             // the four times of day, once the view has settled
 }
@@ -2515,7 +2647,7 @@ document.getElementById('sharebtn').addEventListener('click',function(){
     note.hidden=false; note.textContent=url; if(!ok){ var rg=document.createRange(); rg.selectNodeContents(note); var sel=getSelection(); sel.removeAllRanges(); sel.addRange(rg); } }
   try{ navigator.clipboard.writeText(url).then(function(){done(true);},function(){done(false);}); }catch(e){ done(false); }
 });
-window.AZAD3D={ba:{pose:function(t){ if(!BA.on)baStart(1); BA.run=false; baPose(t); },end:function(){ baEnd(); }},rig:rig,camToken:camToken,finAt:function(x,y){ var s=finSurfaceAt(x,y); return s&&(s.id||'wet'); },
+window.AZAD3D={layers:{open:function(){ lyStart(); },close:function(){ lyEnd(false); },check:function(){ var m=0; if(!LY.parts)return 0; ['furn','walls','lights'].forEach(function(k){ LY.parts[k].forEach(function(q){ m=Math.max(m,Math.abs(q.o.position.y-q.y)); }); }); return m; },parts:function(){ return LY.parts&&{floor:LY.parts.floor.length,furn:LY.parts.furn.length,walls:LY.parts.walls.length,lights:LY.parts.lights.length}; }},walk:{start:function(){ stStart(); },go:function(i){ stShow(i); },state:function(){ return {on:ST.on,i:ST.i,dim:state.dim,hour:state.hour}; },end:function(){ stEnd(); }},ba:{pose:function(t){ if(!BA.on)baStart(1); BA.run=false; baPose(t); },end:function(){ baEnd(); }},rig:rig,camToken:camToken,finAt:function(x,y){ var s=finSurfaceAt(x,y); return s&&(s.id||'wet'); },
   setCam:function(t){ var m=String(t).split('~'), n=m.slice(3,9).map(Number); if(m[0]!=='v1'||n.some(function(v){ return !isFinite(v); }))return;   // follow another view (the compare page): camera only
     if((m[2]==='e')!==(mode==='eye')){ applyCam([m[0],LAYOUT].concat(m.slice(2))); return; }
     if(m[2]==='e'){ var pos=P(n[0],n[1],n[2]), ya=n[3]*Math.PI/180, pi=n[4]*Math.PI/180; camera.position.copy(pos);
