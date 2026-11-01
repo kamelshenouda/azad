@@ -1204,9 +1204,17 @@ function dvLabels(){ var t=dvTimes(); dvBtns.forEach(function(d){ d.s.textConten
   d.b.setAttribute('aria-label',d.n+', '+hhmm(t[d.k])+': go to this time'); d.b.setAttribute('aria-pressed',Math.abs(state.hour-t[d.k])<.13?'true':'false'); }); }
 function dvVisible(){ if(document.documentElement.classList.contains('embed')||document.hidden||!dvBox.offsetParent)return false;
   var r=dvBox.getBoundingClientRect(); return r.width>0&&r.bottom>0&&r.top<window.innerHeight; }
+// Drawn one picture at a time, each in its own quiet moment, and never in the first seconds after the page opens,
+// so the four views never hold the page up (they cost a frame and two shadow updates each).
+var DV_FROM=Infinity, dvNext=0;
 function renderDayViews(){
+  var dvAll=dvBtns, one=dvAll[dvNext%dvAll.length]; dvBtns=[one];
+  try{ renderDayViewsNow(); } finally{ dvBtns=dvAll; }
+  dvNext++; dvWant=dvNext%dvAll.length!==0; idleT=performance.now();       // the next picture waits for its own quiet moment
+}
+function renderDayViewsNow(){
   dvWant=false; var keep=state.hour, pr=renderer.getPixelRatio(), cv=renderer.domElement, sz=renderer.getSize(new T.Vector2()), t=dvTimes();
-  var cw=dvBtns[0].b.clientWidth||160, w=Math.min(Math.round(cw*1.5),sz.x), h=Math.min(Math.round(w*10/16),sz.y), dpr=Math.min(2,window.devicePixelRatio||1);
+  var cw=dvBox.firstChild.clientWidth||160, w=Math.min(Math.round(cw*1.5),sz.x), h=Math.min(Math.round(w*10/16),sz.y), dpr=Math.min(2,window.devicePixelRatio||1);
   var asp=camera.aspect, view=camera.view&&camera.view.enabled?Object.assign({},camera.view):null, arcVis=sunArc.visible;
   camera.clearViewOffset(); camera.aspect=w/h; camera.updateProjectionMatrix(); sunArc.visible=false;   // the views show the rooms, not the guide
   renderer.setRenderTarget(null); renderer.setScissorTest(true); renderer.setViewport(0,0,w,h); renderer.setScissor(0,0,w,h);
@@ -1216,7 +1224,7 @@ function renderDayViews(){
   renderer.setScissorTest(false); renderer.setViewport(0,0,sz.x,sz.y);
   state.hour=keep; setSun(); sunArc.visible=arcVis; camera.aspect=asp;
   if(view)camera.setViewOffset(view.fullWidth,view.fullHeight,view.offsetX,view.offsetY,view.width,view.height); else camera.updateProjectionMatrix();
-  draw(true); dirty=false; needFull=false; dvWant=false;
+  draw(true); dirty=false; needFull=false;
 }
 
 // ---------- Day, Golden, Night: the clock glides to solar noon, an hour before sunset, or 21:30 over 1.5 s
@@ -2617,9 +2625,10 @@ function loop(now){
   var moving=!!anim||!!(JOY.f||JOY.t)||KEYS.some(function(k){return keys[k];});
   walk(dt); tickSun(dt); controls.update();
   if(moving)adaptQuality(raw,now);
-  if(moving||dirty){ draw(false); drawLabels(); drawSunArc(); drawChanges(); drawLy(); drawDims(); hud(); drawMinimap(); placeCard(); drawMeasures(); drawFDims(); drawFinCards(); dirty=false; needFull=true; idleT=now; dvWant=true; }
-  else if(needFull&&now-idleT>140){ draw(true); needFull=false; }        // idle frames skip rendering entirely
-  else if(dvWant&&now-idleT>450&&dvVisible())renderDayViews();             // the four times of day, once the view has settled
+  if(moving||dirty){ draw(false); drawLabels(); drawSunArc(); drawChanges(); drawLy(); drawDims(); hud(); drawMinimap(); placeCard(); drawMeasures(); drawFDims(); drawFinCards(); dirty=false; needFull=true; idleT=performance.now(); dvWant=true; dvNext=0; }
+  else if(needFull&&now-idleT>140){ draw(true); needFull=false; idleT=performance.now();       // idle frames skip rendering entirely
+    if(DV_FROM===Infinity)DV_FROM=idleT+3000; }                         // the four times of day wait until 3 s after the first full frame
+  else if(dvWant&&now>DV_FROM&&now-idleT>(dvNext?250:1200)&&dvVisible())renderDayViews();   // the four times of day, once the view has settled
 }
 
 // ---------- VR (WebXR): stand in the rooms at true scale with a headset. The headset's own floor tracking sets
