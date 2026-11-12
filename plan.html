@@ -882,5 +882,109 @@ body.fsopen{overflow:hidden}
   var fv=read('azad-plan-furn'); if(fv==='built'||fv==='none')setState('furn',fv);
 })();
 </script>
+<script>
+// The plan page and your trial: the 3D page keeps, in this browser, an index of the trials made in its 2D plan (walls,
+// doors, rooms with their areas, the pieces placed and the design's pieces cleared). Here each plan that has one gets a
+// bar: Design or Your trial, and Edit in 2D (the 3D page opened straight into its 2D plan). Your trial is drawn over the
+// design, faded under it, in the plan's own centimetres. It follows the 3D page live when both are open.
+// Built into the page by tools/build_plans.py (trial_script); fSym is the 3D page's own plan symbol code.
+(function(){
+  var KEY='azad-3d-trials', P3D='3d.html', NS='http://www.w3.org/2000/svg', MODE={};
+  function fSym(D,t){ var w=D.w, d=D.d, hw=w/2, hd=d/2, m=D.m, hi=D.y>=90, o='';
+  function n(v){ return Math.round(v*10)/10; }
+  function R(x0,y0,x1,y1,c,rx){ o+='<rect x="'+n(x0)+'" y="'+n(y0)+'" width="'+n(x1-x0)+'" height="'+n(y1-y0)+'"'+(rx?' rx="'+n(rx)+'"':'')+' class="'+c+'"/>'; }
+  function C(x,y,r,c){ o+='<circle cx="'+n(x)+'" cy="'+n(y)+'" r="'+n(r)+'" class="'+c+'"/>'; }
+  function E(x,y,rx,ry,c){ o+='<ellipse cx="'+n(x)+'" cy="'+n(y)+'" rx="'+n(rx)+'" ry="'+n(ry)+'" class="'+c+'"/>'; }
+  function Ln(x1,y1,x2,y2,c){ o+='<line x1="'+n(x1)+'" y1="'+n(y1)+'" x2="'+n(x2)+'" y2="'+n(y2)+'" class="'+(c||'pfl')+'"/>'; }
+  function X(){ Ln(-hw,-hd,hw,hd); Ln(-hw,hd,hw,-hd); }
+  var B=hi?'pfh':'pf';
+  if(m==='sofa'){ R(-hw,-hd,hw,hd,B,4); R(-hw,-hd,hw,-hd+18,'pfl',3); R(-hw,-hd+18,-hw+16,hd,'pfl',3); R(hw-16,-hd+18,hw,hd,'pfl',3); }
+  else if(m==='corner'){ o+='<path d="M'+n(-hw)+' '+n(-hd)+'H'+n(hw)+'V'+n(-hd+95)+'H'+n(-hw+95)+'V'+n(hd)+'H'+n(-hw)+'Z" class="pf"/>'; R(-hw,-hd,hw,-hd+18,'pfl',3); R(-hw,-hd+18,-hw+18,hd,'pfl',3); }
+  else if(m==='pouf'||m==='lounger'){ R(-hw,-hd,hw,hd,B,Math.min(8,hw/3)); if(m==='lounger')Ln(-hw+55,-hd,-hw+55,hd); }
+  else if(m==='low'||m==='screen'){ R(-hw,-hd,hw,hd,B,1.5); if(m==='low')Ln(-hw,-hd+4,hw,-hd+4); }
+  else if(m==='tall'||m==='wallc'){ R(-hw,-hd,hw,hd,B,1); Ln(-hw+3,0,hw-3,0,hi?'pfh':'pfl'); if(m==='tall'&&d>=50)for(var hx=-hw+12;hx<hw-6;hx+=14)Ln(hx-3,-6,hx+3,6); }
+  else if(m==='open'){ R(-hw,-hd,hw,hd,B,1); Ln(-hw,-hd+2,hw,-hd+2); var no=Math.max(1,Math.round(w/90)); for(var u=1;u<no;u++)Ln(-hw+u*w/no,-hd,-hw+u*w/no,hd); }
+  else if(m==='table'||m==='island'){ R(-hw,-hd,hw,hd,B,3); if(m==='island')Ln(-hw,hd-25,hw,hd-25,'pfh'); }
+  else if(m==='deskL'){ o+='<path d="M'+n(-hw)+' '+n(-hd)+'H'+n(hw)+'V'+n(-hd+70)+'H'+n(-hw+70)+'V'+n(hd)+'H'+n(-hw)+'Z" class="pf"/>'; }
+  else if(m==='tableR'||m==='stool'||m==='pouf'){ E(0,0,hw,hd,B); }
+  else if(m==='chair'){ R(-hw,-hd,hw,hd,B,6); R(-hw,-hd,hw,-hd+7,'pfd',2); }
+  else if(m==='bed'||m==='bunk'){ var nb=w>=150?2:1, pw=nb===2?(w-30)/2:w-30; R(-hw,-hd,hw,hd,B,4); R(-hw,-hd,hw,-hd+8,'pfd');
+    for(var i=0;i<nb;i++){ var cx=nb===2?(i?1:-1)*(pw/2+5):0; R(cx-pw/2,-hd+16,cx+pw/2,-hd+56,'pfs',4); } Ln(-hw,-hd+d*.45,hw,-hd+d*.45); if(m==='bunk')Ln(hw-6,hd-50,hw-6,hd-10,'pfd'); }
+  else if(m==='cot'){ R(-hw,-hd,hw,hd,B,4); R(-hw+6,-hd+6,hw-6,hd-6,'pfl',3); }
+  else if(m==='rug'){ R(-hw,-hd,hw,hd,'pfr',4); }
+  else if(m==='rugR'){ E(0,0,hw,hd,'pfr'); }
+  else if(m==='flamp'||m==='coat'){ C(0,0,hw*.5+4,'pf'); C(0,0,3,'pfd'); }
+  else if(m==='pendant'){ C(0,0,hw,'pfh'); Ln(-hw*.6,0,hw*.6,0,'pfh'); Ln(0,-hw*.6,0,hw*.6,'pfh'); }
+  else if(m==='fan'){ C(0,0,hw,'pfh'); C(0,0,9,'pfh'); for(var fb=0;fb<3;fb++){ var a=fb*2.094; Ln(Math.cos(a)*10,Math.sin(a)*10,Math.cos(a)*(hw-3),Math.sin(a)*(hw-3),'pfh'); } }
+  else if(m==='tent'){ R(-hw,-hd,hw,hd,B); X(); }
+  else if(m==='mirror'||m==='art'||m==='rail'||m==='ac'){ if(/R$/.test(t||''))R(-hw,-hd,hw,hd,B,hd); else R(-hw,-hd,hw,hd,B); }
+  else if(m==='base'||m==='drawers'){ R(-hw,-hd,hw,hd,B); Ln(-hw,hd-3,hw,hd-3); }
+  else if(m==='sink'){ R(-hw,-hd,hw,hd,B); var nbw=w>=100?2:1, bw=nbw===2?(w-22)/2:Math.min(w-20,60); for(var bi=0;bi<nbw;bi++){ var bx=nbw===2?(bi?1:-1)*(bw/2+3):0; R(bx-bw/2,-hd+12,bx+bw/2,hd-6,'pfs',5); C(bx,4,2.5,'pfl'); } }
+  else if(m==='hob'){ R(-hw,-hd,hw,hd,B); var nr=w>=90?5:4; for(var hr=0;hr<nr;hr++){ if(nr===5&&hr===4){ C(0,2,10,'pfl'); continue; } C(((hr%2)?1:-1)*(w/4.6),((hr<2)?-1:1)*11+2,7,'pfl'); } }
+  else if(m==='dw'||m==='fridge'||m==='ovens'||m==='hood'||m==='bbq'){ R(-hw,-hd,hw,hd,m==='hood'?'pfh':B); X(); }
+  else if(m==='washer'||m==='acout'){ R(-hw,-hd,hw,hd,B,2); C(0,m==='acout'?0:3,Math.min(hw,hd)*.62,'pfl'); }
+  else if(m==='wc'){ var wl=D.h<=45; if(!wl)R(-hw,-hd,hw,-hd+18,B,2); else R(-hw*.8,-hd,hw*.8,-hd+6,B,1); var by=wl?-hd+6:-hd+18; E(0,(by+hd)/2,hw-(wl?0:3),(hd-by)/2,'pf'); E(0,(by+hd)/2+3,hw-9,(hd-by)/2-8,'pfs'); }
+  else if(m==='bidet'){ E(0,0,hw,hd,'pf'); E(0,2,hw-8,hd-9,'pfs'); }
+  else if(m==='vanity'||m==='basin'){ R(-hw,-hd,hw,hd,B,2); var nt=w>=110?2:1; for(var vi=0;vi<nt;vi++){ var vx=nt===2?(vi?1:-1)*w/4:0; E(vx,3,Math.min(22,w/nt/2-6),hd-9,'pfs'); } }
+  else if(m==='shower'){ R(-hw,-hd,hw,hd,B); X(); C(0,0,4,'pfl'); }
+  else if(m==='bath'){ R(-hw,-hd,hw,hd,B,6); R(-hw+7,-hd+7,hw-7,hd-7,'pfs',Math.min(18,hd-7)); C(-hw+16,0,2.5,'pfl'); }
+  else if(m==='heater'){ C(0,0,hw,B); }
+  else if(m==='rack'){ R(-hw,-hd,hw,hd,B); for(var rz=-hd+8;rz<hd;rz+=8)Ln(-hw,rz,hw,rz); }
+  else if(m==='parasol'){ C(0,0,hw,'pfh'); for(var pa=0;pa<4;pa++){ var aa=pa*Math.PI/4; Ln(-Math.cos(aa)*hw,-Math.sin(aa)*hw,Math.cos(aa)*hw,Math.sin(aa)*hw,'pfh'); } R(-22,-22,22,22,'pf'); }
+  else if(m==='planter'){ R(-hw,-hd,hw,hd,B,2); for(var pi=-hw+hd;pi<hw;pi+=d)C(pi,0,hd*.7,'pfg'); }
+  else if(m==='plant'||m==='tree'){ C(0,0,hw,'pfg'); C(0,0,hw*.5,'pf'); for(var lk=0;lk<8;lk++){ var la=lk*Math.PI/4; Ln(Math.cos(la)*hw*.5,Math.sin(la)*hw*.5,Math.cos(la)*hw*.95,Math.sin(la)*hw*.95); } }
+  else R(-hw,-hd,hw,hd,B,2);
+  return o; }
+  function read(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ return {}; } }
+  function el(tag,a,parent){ var e=document.createElementNS(NS,tag); for(var k in a)e.setAttribute(k,a[k]); if(parent)parent.appendChild(e); return e; }
+  function esc(t){ return String(t).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  try{ MODE=JSON.parse(sessionStorage.getItem(KEY+'-mode')||'{}')||{}; }catch(e){}
+  var css=document.createElement('style'); css.textContent=
+    '.ptbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 10px;padding:9px 12px;border-radius:10px;border:1px solid var(--line,#D8D5CF);background:var(--sheet,#FBFAF7);font:500 13px/1.4 var(--sans,system-ui,sans-serif);color:var(--ink,#1D2125)}'+
+    '.ptbar b{font-weight:600}.ptbar .pts{color:var(--muted,#666C71);flex:1 1 260px;min-width:0}'+
+    '.ptbar .seg{display:inline-flex;border:1px solid var(--line,#D8D5CF);border-radius:8px;overflow:hidden}.ptbar .seg button{appearance:none;border:0;background:transparent;color:inherit;font:600 12.5px var(--sans,system-ui,sans-serif);padding:6px 11px;cursor:pointer}'+
+    '.ptbar .seg button[aria-pressed=true]{background:var(--accent,#2E5A74);color:#fff}.ptbar a{font-weight:600;color:var(--accent,#2E5A74);text-decoration:none;white-space:nowrap}.ptbar a:hover{text-decoration:underline}'+
+    '.ptbar button:focus-visible,.ptbar a:focus-visible{outline:2px solid var(--accent,#2E5A74);outline-offset:2px}'+
+    'svg.trialwalls g.labels,svg.trialwalls g.callouts,svg.trialwalls g.dims,svg.trialwalls g.cams,svg.trialwalls g.sight,svg.trialwalls g.glabels{display:none}'+
+    'svg.trialon g.placed{display:none}svg.trialon:not(.trialwalls) g.furn{opacity:.35}'+
+    '.ptr .ptf{fill:var(--sheet,#FBFAF7);opacity:.88}.ptr .ptw{fill:#2B2F33}.ptr .ptw.ch{fill:var(--accent,#2E5A74)}.ptr .ptw.lk{fill:#6B6F73}'+
+    '.ptr .ptg{stroke:#7FA7BF;stroke-width:3}.ptr .ptx{fill:rgba(192,57,43,.1);stroke:#C0392B;stroke-width:1.5;stroke-dasharray:6 4}'+
+    '.ptr .ptl{stroke:#2B2F33;stroke-width:2;fill:none}.ptr .pta{stroke:#2B2F33;stroke-width:1;fill:none;stroke-dasharray:5 4}'+
+    '.ptr .ptn,.ptr .ptd{paint-order:stroke;stroke:#FBFAF7;stroke-width:5px;stroke-linejoin:round}.ptr .ptn{font:600 22px var(--sans,system-ui,sans-serif);fill:#1D2125;text-anchor:middle}.ptr .ptd{font:500 15px var(--mono,ui-monospace,monospace);fill:#4A4F54;text-anchor:middle}'+
+    '.ptr .pf{fill:#FBFAF7;stroke:#4A4F54;stroke-width:1.3}.ptr .pfl{fill:none;stroke:#7A8085;stroke-width:1}.ptr .pfd{fill:#7A8085;opacity:.55}.ptr .pfs{fill:#EAF0F3;stroke:#7A8085;stroke-width:1}'+
+    '.ptr .pfr{fill:rgba(102,108,113,.08);stroke:#7A8085;stroke-width:1;stroke-dasharray:4 3}.ptr .pfh{fill:none;stroke:#7A8085;stroke-width:1.2;stroke-dasharray:6 4}.ptr .pfg{fill:#DCE5D2;stroke:#5E7F4A;stroke-width:1}'+
+    '.ptr .pgone{stroke:#C0392B;stroke-width:1.5;opacity:.7}';
+  document.head.appendChild(css);
+  function draw(svg,k,e){ var old=svg.querySelector('g.ptr'); if(old)old.remove(); var on=!!e&&MODE[k]==='trial', walls=on&&!!e.lines; svg.classList.toggle('trialon',on); svg.classList.toggle('trialwalls',walls); if(!on)return;
+    var vb=svg.viewBox.baseVal, g=el('g',{class:'ptr'},svg);
+    if(walls)el('rect',{x:vb.x,y:vb.y,width:vb.width,height:vb.height,class:'ptf'},g); else { var lb=svg.querySelector('g.labels'); if(lb)svg.appendChild(lb); }   // the room names stay on top   // walls changed: the design faded under the trial, its labels make way; else only its furniture fades
+    (e.was||[]).forEach(function(b){ el('rect',{x:b[0],y:b[1],width:b[2]-b[0],height:b[3]-b[1],class:'ptx'},g); });   // walls the trial takes out
+    (e.gone||[]).forEach(function(p){ var hw=Math.min(p.w,60)/2, hd=Math.min(p.d,60)/2; el('line',{x1:p.x-hw,y1:p.y-hd,x2:p.x+hw,y2:p.y+hd,class:'pgone'},g); el('line',{x1:p.x-hw,y1:p.y+hd,x2:p.x+hw,y2:p.y-hd,class:'pgone'},g); });
+    (e.pcs||[]).forEach(function(p){ var pg=el('g',{transform:'translate('+p.x+' '+p.y+') rotate('+(p.r||0)+')'},g); pg.innerHTML=fSym({w:p.w,d:p.d,h:p.h,y:p.y0||0,m:p.m},p.t);
+      var tt=el('title',{},pg); tt.textContent=p.n+' · '+p.w+' × '+p.d+' cm'; });
+    (e.lines||[]).forEach(function(L){ var cls='ptw'+(L.nw||L.moved?' ch':'')+(L.lock?' lk':''), a=L.a[0];
+      function seg(a0,a1){ if(a1-a0<.5)return; var b=L.o==='h'?[a0,L.c[0],a1,L.c[1]]:[L.c[0],a0,L.c[1],a1]; el('rect',{x:b[0],y:b[1],width:b[2]-b[0],height:b[3]-b[1],class:cls},g); }
+      (L.ops||[]).slice().sort(function(p,q){ return p[0]-q[0]; }).forEach(function(op){ if(op[0]>a)seg(a,op[0]); a=Math.max(a,op[1]);
+        if(op[2]==='win'||op[2]==='gl'){ var m=(L.c[0]+L.c[1])/2; el('line',L.o==='h'?{x1:op[0],y1:m,x2:op[1],y2:m,class:'ptg'}:{x1:m,y1:op[0],x2:m,y2:op[1],class:'ptg'},g); } });
+      if(L.a[1]>a)seg(a,L.a[1]); });
+    (e.doors||[]).forEach(function(d){ if(d.slide){ var m=(d.c[0]+d.c[1])/2; el('line',d.o==='h'?{x1:d.op[0],y1:m,x2:d.op[1],y2:m,class:'ptl'}:{x1:m,y1:d.op[0],x2:m,y2:d.op[1],class:'ptl'},g); return; }
+      var h=d.h, l=d.l, s=d.s, z=(l[0]-h[0])*(s[1]-h[1])-(l[1]-h[1])*(s[0]-h[0]);
+      el('line',{x1:h[0],y1:h[1],x2:l[0],y2:l[1],class:'ptl'},g); el('path',{d:'M'+l[0]+' '+l[1]+' A'+d.w+' '+d.w+' 0 0 '+(z>0?1:0)+' '+s[0]+' '+s[1],class:'pta'},g); }); 
+    (e.rooms||[]).forEach(function(r){ var cx=(r.r[0]+r.r[2])/2, cy=(r.r[1]+r.r[3])/2, rw=r.r[2]-r.r[0]-10, f1=Math.min(22,rw/(r.n.length*.6)), dt=r.a.toFixed(1)+' m² · '+r.w+' × '+r.d, f2=Math.min(15,rw/(dt.length*.6));
+      var t=el('text',{x:cx,y:cy-4,class:'ptn','font-size':Math.max(9,f1)},g); t.textContent=r.n; var t2=el('text',{x:cx,y:cy+f2+6,class:'ptd','font-size':Math.max(8,f2)},g); t2.textContent=dt; });
+  }
+  function bar(svg,k,e){ var id='ptbar-'+k, b=document.getElementById(id); if(!b){ b=document.createElement('div'); b.id=id; b.className='ptbar'; svg.parentNode.insertBefore(b,svg); }
+    var link=P3D+'?plan='+encodeURIComponent(k)+'&edit=1';
+    if(!e){ b.innerHTML='<span class="pts">Try it yourself: move walls and doors, and furnish the rooms, in a 2D plan that shows in the 3D. It stays in this browser; the design does not change.</span><a href="'+link+'">Edit this plan in 2D ↗</a>'; return; }
+    var parts=[]; if(e.sum)parts.push(esc(e.sum.replace(/^Your trial of [^:]*: /,''))); if(e.pcs&&e.pcs.length)parts.push(e.pcs.length+(e.pcs.length===1?' piece':' pieces')+' placed'); if(e.gone&&e.gone.length)parts.push(e.gone.length+' of the design\'s cleared');
+    var on=MODE[k]==='trial';
+    b.innerHTML='<span class="pts"><b>Your trial</b>, in this browser: '+parts.join(' · ')+'</span><span class="seg" role="group" aria-label="Show"><button type="button" data-m="design" aria-pressed="'+!on+'">Design</button><button type="button" data-m="trial" aria-pressed="'+on+'">Your trial</button></span><a href="'+link+'">Edit in 2D ↗</a>';
+    [].forEach.call(b.querySelectorAll('[data-m]'),function(x){ x.addEventListener('click',function(){ MODE[k]=x.getAttribute('data-m'); try{ sessionStorage.setItem(KEY+'-mode',JSON.stringify(MODE)); }catch(er){} all(); }); }); }
+  function all(){ var idx=read(); [].forEach.call(document.querySelectorAll('svg.plan[id^="plan-"]'),function(svg){ var k=svg.id.slice(5), e=idx[k]; bar(svg,k,e); draw(svg,k,e); }); }
+  all(); window.addEventListener('storage',function(ev){ if(ev.key===KEY)all(); });
+  window.APT_PLAN_TRIAL={redraw:all};
+})();
+
+</script>
 
 </html>
